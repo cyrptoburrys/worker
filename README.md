@@ -1,16 +1,17 @@
-Allora - TFT Model
-
-![363396006-fb524b13-49c1-4c8f-90d9-50a9be69130c](https://github.com/user-attachments/assets/6111e14e-fb1d-4573-be68-c72bc09bba8c)
-
+# Creating the README.md file with the updated content as requested.
+readme_content = """
+### Allora - TFT Model  
+![Allora Logo](667ca11ef3c5440fdacd9c66_66464b1563777b5bd5e3ef02_allora-points-program-black.png)
 
 This guide provides instructions to set up a price prediction node using the Temporal Fusion Transformer (TFT) model. The setup predicts prices for ETH, BTC, BNB, and SOL.
 
-How to Install?
-OPTION 1: One-Click Installation Script
-Run Command:
+### How to Install?
 
-bash
-Copy code
+#### OPTION 1: One-Click Installation Script
+
+**Run Command:**
+
+```bash
 cd $HOME
 rm -rf alloraoneclickinstall.sh
 wget https://raw.githubusercontent.com/cyrptoburrys/worker/main/alloraoneclickinstall.sh && chmod +x alloraoneclickinstall.sh && ./alloraoneclickinstall.sh
@@ -20,6 +21,8 @@ Prerequisites
 Before you start, ensure you have Docker Compose installed.
 
 bash
+Always show details
+
 Copy code
 # Install Docker
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -50,18 +53,24 @@ Deployment - Read Carefully!
 Step 1-1: Clone Allora Repository
 
 bash
+Always show details
+
 Copy code
 git clone https://github.com/allora-network/allora-huggingface-walkthrough
 cd allora-huggingface-walkthrough
 Step 2: Configure
 
 bash
+Always show details
+
 Copy code
 cp config.example.json config.json
 nano config.json
 Edit addressKeyName & addressRestoreMnemonic. Paste inside config.json:
 
 json
+Always show details
+
 Copy code
 {
     "wallet": {
@@ -117,14 +126,25 @@ Copy code
 Step 3: Export Configuration
 
 bash
+Always show details
+
 Copy code
 chmod +x init.config
 ./init.config
 Step 4: Run Upgrade Script
 
 bash
+Always show details
+
 Copy code
 wget https://raw.githubusercontent.com/cyrptoburrys/worker/main/upgrade-model.sh && chmod +x upgrade-model.sh && ./upgrade-model.sh
 Check Your Wallet:
 
 Visit: Allora Wallet Check
+
+This guide sets up your Allora worker nodes using the Temporal Fusion Transformer model to predict cryptocurrency prices. For support and more information, visit the Allora Network community and documentation. """
+
+Save the README content to a file
+with open("/mnt/data/README.md", "w") as file: file.write(readme_content)
+
+"/mnt/data/README.md created successfully."
