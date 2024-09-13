@@ -1,5 +1,6 @@
-![363396006-fb524b13-49c1-4c8f-90d9-50a9be69130c](https://github.com/user-attachments/assets/b2572478-1f4b-470c-ac72-7d50b8f854c1)Allora - TFT Model
+Allora - TFT Model
 
+![363396006-fb524b13-49c1-4c8f-90d9-50a9be69130c](https://github.com/user-attachments/assets/6111e14e-fb1d-4573-be68-c72bc09bba8c)
 
 
 This guide provides instructions to set up a price prediction node using the Temporal Fusion Transformer (TFT) model. The setup predicts prices for ETH, BTC, BNB, and SOL.
@@ -127,4 +128,3 @@ wget https://raw.githubusercontent.com/cyrptoburrys/worker/main/upgrade-model.sh
 Check Your Wallet:
 
 Visit: Allora Wallet Check
-
