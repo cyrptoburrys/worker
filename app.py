@@ -1,3 +1,9 @@
+
+---
+
+### 2. `app.py`
+
+```python
 import torch
 import torch.nn as nn
 import pandas as pd
@@ -6,6 +12,7 @@ import requests
 from flask import Flask, Response, json
 import logging
 from datetime import datetime
+from EnhancedPricePredictor import TemporalFusionTransformer
 
 app = Flask(__name__)
 
@@ -13,17 +20,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("main")
 
-# Define the updated model class
-class TemporalFusionTransformer(nn.Module):
-    def __init__(self):
-        super(TemporalFusionTransformer, self).__init__()
-        # Load the model architecture here if necessary
-
-    def forward(self, input_seq):
-        # Define forward logic if necessary
-        pass
-
-# Load the saved model
+# Load the saved TFT model
 model = TemporalFusionTransformer()
 model.load_state_dict(torch.load("final_tft_model.pth")['model_state_dict'])
 model.eval()
@@ -68,18 +65,16 @@ def get_inference(token):
         current_time = df.iloc[-1]["date"]
         logger.info(f"Current Price: {current_price} at {current_time}")
 
-        # Preparing the sequence for model prediction
         scaler = MinMaxScaler(feature_range=(-1, 1))
         scaled_data = scaler.fit_transform(df['price'].values.reshape(-1, 1))
 
         seq = torch.FloatTensor(scaled_data).view(1, -1, 1)
 
-        # Make prediction
         with torch.no_grad():
             y_pred = model(seq)
 
         predicted_prices = scaler.inverse_transform(y_pred.numpy().reshape(-1, 1))
-        predicted_price = round(float(predicted_prices[1][0]), 2)  # Adjust to match the timeframe
+        predicted_price = round(float(predicted_prices[1][0]), 2)
 
         logger.info(f"Prediction: {predicted_price}")
         return Response(json.dumps(predicted_price), status=200, mimetype='application/json')
