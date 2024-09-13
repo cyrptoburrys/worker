@@ -59,4 +59,57 @@ cat > config.json <<EOL
             "inferenceEntrypointName": "api-worker-reputer",
             "loopSeconds": 4,
             "parameters": {
-                "InferenceEndpoint
+                "InferenceEndpoint": "http://inference:8000/inference/{Token}",
+                "Token": "ETH"
+            }
+        },
+        {
+            "topicId": 3,
+            "inferenceEntrypointName": "api-worker-reputer",
+            "loopSeconds": 6,
+            "parameters": {
+                "InferenceEndpoint": "http://inference:8000/inference/{Token}",
+                "Token": "BTC"
+            }
+        },
+        {
+            "topicId": 5,
+            "inferenceEntrypointName": "api-worker-reputer",
+            "loopSeconds": 8,
+            "parameters": {
+                "InferenceEndpoint": "http://inference:8000/inference/{Token}",
+                "Token": "SOL"
+            }
+        },
+        {
+            "topicId": 7,
+            "inferenceEntrypointName": "api-worker-reputer",
+            "loopSeconds": 2,
+            "parameters": {
+                "InferenceEndpoint": "http://inference:8000/inference/{Token}",
+                "Token": "BNB"
+            }
+        }
+    ]
+}
+EOL
+
+# Prompt user for addressKeyName and addressRestoreMnemonic
+read -p "Enter your addressKeyName: " addressKeyName
+read -p "Enter your addressRestoreMnemonic: " addressRestoreMnemonic
+
+# Update the config.json with user-provided values
+jq --arg keyName "$addressKeyName" --arg mnemonic "$addressRestoreMnemonic" \
+   '.wallet.addressKeyName = $keyName | .wallet.addressRestoreMnemonic = $mnemonic' config.json > temp.json && mv temp.json config.json
+
+# Export and run the initialization script
+chmod +x init.config
+./init.config
+
+# Download and run the upgrade script
+echo "Downloading and running the upgrade script..."
+wget https://raw.githubusercontent.com/cyrptoburrys/worker/main/upgrade-model.sh
+chmod +x upgrade-model.sh
+./upgrade-model.sh
+
+echo "Installation complete! You can check your wallet here: http://worker-tx.nodium.xyz/"
