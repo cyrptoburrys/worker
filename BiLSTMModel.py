@@ -1,10 +1,13 @@
 import torch
-import torch.nn as nn
 import pandas as pd
-import requests
 from pytorch_forecasting.models.temporal_fusion_transformer import TemporalFusionTransformer
-from pytorch_forecasting import TimeSeriesDataSet, Baseline
+from pytorch_forecasting import TimeSeriesDataSet, QuantileLoss
 from pytorch_forecasting.data import NaNLabelEncoder
+from pytorch_lightning import Trainer
+from pytorch_lightning.loggers import CSVLogger
+from torch.utils.data import DataLoader
+import requests
+import numpy as np
 
 # Function to fetch historical data from Binance
 def get_binance_data(symbol, interval="1m", limit=1200):
@@ -26,23 +29,24 @@ def get_binance_data(symbol, interval="1m", limit=1200):
     else:
         raise Exception(f"Failed to retrieve data: {response.text}")
 
-# Prepare the dataset specifically handling 20-minute and 10-minute predictions for BTC, ETH, BNB, and SOL
+# Prepare the dataset for the Temporal Fusion Transformer
 def prepare_tft_dataset(symbols, max_encoder_length=120, max_prediction_length=20):
     dfs = []
     for symbol in symbols:
-        # Adjust limit based on specific requirements for BTC, ETH, BNB (20 minutes) and SOL (10 minutes)
-        limit = 1200 if symbol in ['BTCUSDT', 'ETHUSDT', 'BNBUSDT'] else 600  # SOL has a smaller prediction window, so less history needed
+        limit = 1200 if symbol in ['BTCUSDT', 'ETHUSDT', 'BNBUSDT'] else 600
         df = get_binance_data(symbol, limit=limit)
         df['symbol'] = symbol
         dfs.append(df)
 
-    # Combine all dataframes into one, preserving context for each symbol
-    data = pd.concat(dfs)
-    data['time_idx'] = (data['date'] - data['date'].min()).dt.total_seconds() // 60
+    data = pd.concat(dfs).reset_index(drop=True)
+    data['time_idx'] = ((data['date'] - data['date'].min()).dt.total_seconds() // 60).astype(int)
     data['group'] = data['symbol']
     data['target'] = data['price']
 
-    # Create the TimeSeriesDataSet required for TFT with added context from volume and high-low range
+    # Ensure that the index is unique by resetting and reindexing
+    data = data.drop_duplicates(subset=['time_idx', 'group'])
+    data = data.sort_values(['group', 'time_idx']).reset_index(drop=True)
+
     dataset = TimeSeriesDataSet(
         data,
         time_idx="time_idx",
@@ -58,43 +62,50 @@ def prepare_tft_dataset(symbols, max_encoder_length=120, max_prediction_length=2
         add_encoder_length=True,
     )
 
-    return dataset
+    return dataset, data
 
-# Training the Temporal Fusion Transformer model with the final refined settings
-def train_tft_model(dataset, epochs=50):
-    # Split dataset into training and validation
-    training, validation = dataset.split_by_time_idx(int(len(dataset) * 0.8))
+# Training the Temporal Fusion Transformer model
+def train_tft_model(dataset, data):
+    # Split dataset into training and validation dataloaders
+    train_dataloader = dataset.to_dataloader(train=True, batch_size=64, num_workers=4)
+    val_dataloader = dataset.to_dataloader(train=False, batch_size=64, num_workers=4)
 
-    # Create the Temporal Fusion Transformer model with adjustments to hidden size and attention
+    # Create the Temporal Fusion Transformer model
     tft = TemporalFusionTransformer.from_dataset(
-        training,
-        learning_rate=0.0005,  # Slightly reduced learning rate for stability
-        hidden_size=128,  # Hidden size increased to capture more complex patterns
+        dataset,
+        learning_rate=0.0005,
+        hidden_size=128,
         attention_head_size=4,
-        dropout=0.3,  # Dropout set to avoid overfitting
+        dropout=0.3,
         hidden_continuous_size=64,
-        output_size=7,  # Quantile outputs for probabilistic forecasting
-        loss=Baseline.MAE(),  # Using Mean Absolute Error as a base loss function
+        output_size=7,
+        loss=QuantileLoss(),
         reduce_on_plateau_patience=5,
     )
 
-    # Train the model with enhanced learning configurations
-    trainer = torch.optim.Adam(tft.parameters(), lr=0.0005)  # Using Adam optimizer with refined learning rate
-    for epoch in range(epochs):
-        tft.train_epoch(epoch, trainer, training, validation, batch_size=64)
-        print(f"Epoch {epoch+1}/{epochs} completed - Loss: {tft.current_epoch_loss(training)}")
+    # Ensure the model's `val_dataloader` is correctly set
+    tft.val_dataloader = lambda: val_dataloader  # Explicitly define the validation dataloader
 
-    return tft
+    # Define the Trainer with logger
+    logger = CSVLogger("logs", name="tft_model")
+    trainer = Trainer(
+        max_epochs=50,
+        accelerator='cpu',  # Use 'cpu' since GPU is not available
+        logger=logger,
+        check_val_every_n_epoch=1,  # Ensure validation runs at least every epoch
+        enable_checkpointing=False,  # Disable checkpointing to avoid related errors
+        log_every_n_steps=10,  # Lower the logging interval for more frequent updates
+    )
 
-# Main execution to ensure the model is perfectly tailored to BTC, ETH, BNB, and SOL requirements
-if __name__ == "__main__":
-    # Prepare the dataset with configurations for 20-minute predictions (BTC, ETH, BNB) and 10-minute (SOL)
-    symbols = ['BNBUSDT', 'BTCUSDT', 'ETHUSDT', 'SOLUSDT']
-    dataset = prepare_tft_dataset(symbols, max_encoder_length=120, max_prediction_length=20)
+    # Fit the model using the defined dataloaders
+    trainer.fit(tft, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 
-    # Train the Temporal Fusion Transformer model
-    model = train_tft_model(dataset, epochs=50)
-
-    # Save the model for future deployment
-    torch.save(model.state_dict(), "final_tft_model.pth")
+    # Save the trained model state
+    torch.save({'model_state_dict': tft.state_dict()}, "final_tft_model.pth")
     print("Model trained and saved as final_tft_model.pth")
+
+# Main execution
+if __name__ == "__main__":
+    symbols = ['BNBUSDT', 'BTCUSDT', 'ETHUSDT', 'SOLUSDT']
+    dataset, data = prepare_tft_dataset(symbols, max_encoder_length=120, max_prediction_length=20)
+    train_tft_model(dataset, data)
