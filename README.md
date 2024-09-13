@@ -1,6 +1,6 @@
-Allora - TFT Model
+![363396006-fb524b13-49c1-4c8f-90d9-50a9be69130c](https://github.com/user-attachments/assets/b2572478-1f4b-470c-ac72-7d50b8f854c1)Allora - TFT Model
 
-667ca11ef3c5440fdacd9c66_66464b1563777b5bd5e3ef02_allora-points-program-black
+
 
 This guide provides instructions to set up a price prediction node using the Temporal Fusion Transformer (TFT) model. The setup predicts prices for ETH, BTC, BNB, and SOL.
 
