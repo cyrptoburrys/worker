@@ -3,9 +3,9 @@ pytorch-forecasting==0.9.1
 pandas==1.3.3
 requests==2.26.0
 flask==2.0.2
-scikit-learn==0.24.2
+scikit-learn==1.0.2         # Upgraded for better compatibility
 gunicorn[gthread]
-transformers[torch]
+transformers[torch]==4.18.0  # Specified compatible version
 python-dotenv
-numpy==1.25.2
+numpy==1.21.6               # Downgraded for compatibility
 joblib==1.3.2
