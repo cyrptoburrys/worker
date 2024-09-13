@@ -47,11 +47,11 @@ cat > config.json <<EOL
         "addressRestoreMnemonic": "<your mnemonic phrase>",
         "alloraHomeDir": "/root/.allorad",
         "gas": "1000000",
-        "gasAdjustment": 1.0,
+        "gasAdjustment": 1.5,
         "nodeRpc": "https://allora-rpc.testnet.allora.network",
         "maxRetries": 1,
         "delay": 1,
-        "submitTx": false
+        "submitTx": true
     },
     "worker": [
         {
