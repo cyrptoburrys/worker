@@ -1,9 +1,3 @@
-
----
-
-### 2. `app.py`
-
-```python
 import torch
 import torch.nn as nn
 import pandas as pd
