@@ -1,35 +1,38 @@
-# PyTorch for deep learning model handling, compatible with current setup
+# PyTorch 1.9.0, compatible with pytorch-forecasting 0.9.1 and torchmetrics 0.6.0
 torch==1.9.0
 
-# PyTorch Forecasting for time series models like TFT, ensure compatibility with torch
+# PyTorch Lightning 1.3.8, compatible with pytorch-forecasting 0.9.1
+pytorch-lightning==1.3.8
+
+# Torchmetrics 0.4.1, compatible with PyTorch Lightning 1.3.8
+torchmetrics==0.4.1
+
+# PyTorch Forecasting 0.9.1
 pytorch-forecasting==0.9.1
 
-# Pandas for data manipulation, left unspecified to allow flexibility
-pandas>=1.5.3  # Ensure a stable version, should work well with PyTorch
+# Transformers 4.5.1, compatible with torch 1.9.0
+transformers==4.5.1
 
-# Requests library for making HTTP requests, compatible and widely used
+# Pandas for data manipulation
+pandas==1.3.0
+
+# Requests library for making HTTP requests
 requests==2.31.0
 
-# Dotenv for loading environment variables, works across Flask and Docker setups
-python-dotenv>=1.0.0
+# Dotenv for loading environment variables
+python-dotenv==1.0.0
 
-# Numpy for numerical operations, matching with PyTorch and Scikit-learn
-numpy==1.25.2  # Ensure compatibility with torch and scikit-learn
+# Numpy for numerical operations, compatible with torch 1.9.0
+numpy==1.19.5
 
 # Joblib for model serialization and parallel processing
 joblib==1.3.2
 
-# Scikit-learn for ML utilities, aligns with pandas and numpy versions
+# Scikit-learn for ML utilities
 scikit-learn==0.24.2
 
-# Flask for setting up the asynchronous server, updated to latest stable async support
-flask[async]>=2.1.0  # Ensure async support is enabled for your setup
+# Flask for setting up the asynchronous server
+flask[async]==2.1.0
 
 # Gunicorn for running Flask apps in production with thread support
-gunicorn[gthread]>=20.1.0
-
-# Hugging Face Transformers, with torch support, compatible with PyTorch 1.9.0
-transformers[torch]>=4.30.0
-
-# Torchmetrics adjusted to a compatible version with torch 1.9.0
-torchmetrics==0.6.0  # Modify if needed based on compatibility
+gunicorn[gthread]==20.1.0
