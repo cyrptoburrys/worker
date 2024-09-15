@@ -16,9 +16,11 @@ if [[ "$installdep" =~ ^[Yy]$ ]]; then
     rm -rf app.py
     rm -rf EnhancedPricePredictor.py
     rm -rf final_tft_model.pth
+    rm -rf requirements.txt
     wget -q https://raw.githubusercontent.com/cyrptoburrys/worker/main/app.py -O /root/allora-huggingface-walkthrough/app.py
     wget -q https://raw.githubusercontent.com/cyrptoburrys/worker/main/EnhancedPricePredictor.py -O /root/allora-huggingface-walkthrough/EnhancedPricePredictor.py
     wget -q https://github.com/cyrptoburrys/worker/main/final_tft_model.pth -O /root/allora-huggingface-walkthrough/final_tft_model.pth
+    wget -q https://github.com/cyrptoburrys/worker/main/requirements.txt -O /root/allora-huggingface-walkthrough/requirements.txt
     wait
     
     echo -e "${LIGHT_BLUE}Rebuilding and running the model...${RESET}"
