@@ -20,7 +20,7 @@ numpy==1.25.2  # Ensure compatibility with torch and scikit-learn
 joblib==1.3.2
 
 # Scikit-learn for ML utilities, aligns with pandas and numpy versions
-scikit-learn==1.3.1
+scikit-learn==0.24.2
 
 # Flask for setting up the asynchronous server, updated to latest stable async support
 flask[async]>=2.1.0  # Ensure async support is enabled for your setup
