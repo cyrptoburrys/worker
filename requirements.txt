@@ -1,5 +1,5 @@
 # PyTorch for deep learning model handling, compatible with current setup
-torch==2.0.1 
+torch==1.9.0
 
 # PyTorch Forecasting for time series models like TFT, ensure compatibility with torch
 pytorch-forecasting==0.9.1
@@ -28,5 +28,5 @@ flask[async]>=2.1.0  # Ensure async support is enabled for your setup
 # Gunicorn for running Flask apps in production with thread support
 gunicorn[gthread]>=20.1.0
 
-# Hugging Face Transformers, with torch support, compatible with PyTorch 2.0.1
+# Hugging Face Transformers, with torch support, compatible with PyTorch 1.9.0
 transformers[torch]>=4.30.0
