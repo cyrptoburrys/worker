@@ -94,7 +94,7 @@ def train_tft_model(dataset, data):
     )
 
     # Fit the model using the defined dataloaders
-    trainer.fit(tft, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
+    trainer.fit(tft, train_dataloader=train_dataloader, val_dataloaders=val_dataloader)
 
     # Save the trained model checkpoint
     trainer.save_checkpoint("final_tft_model.pth")
@@ -106,4 +106,3 @@ if __name__ == "__main__":
     dataset, data = prepare_tft_dataset(symbols, max_encoder_length=120, max_prediction_length=20)
     train_tft_model(dataset, data)
 
-    train_tft_model(dataset, data)
