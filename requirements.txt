@@ -1,24 +1,25 @@
 # Core Packages
-torch==1.9.0                   # Compatible with pytorch-forecasting 0.9.1
-pytorch-lightning==1.3.8       # Compatible with torch 1.9.0
-torchmetrics==0.4.1            # Compatible with pytorch-lightning 1.3.8
-pytorch-forecasting==0.9.1     # Requires pytorch-lightning<1.5.0
+torch==1.9.0
+pytorch-lightning==1.3.8
+torchmetrics==0.4.1
+pytorch-forecasting==0.9.1
 
 # Transformers Library
-transformers==4.5.1            # Compatible with torch 1.9.0
+transformers==4.5.1
 
 # Data Manipulation and Processing
-pandas==1.3.0                  # Works well with PyTorch
-numpy==1.19.5                  # Compatible with torch 1.9.0
-scikit-learn==0.24.2           # Aligns with pandas and numpy versions
-joblib==1.3.2                  # For model serialization and parallel processing
+pandas==1.3.0
+numpy==1.19.5
+scikit-learn==0.24.2
+joblib==1.3.2
 
 # Web and API
-flask[async]==2.1.0            # For setting up the asynchronous server
-gunicorn[gthread]==20.1.0      # For running Flask apps in production
-requests==2.31.0               # For making HTTP requests
-python-dotenv==1.0.0           # For loading environment variables
+flask[async]==2.0.3         # Downgrade Flask to 2.0.3
+werkzeug==2.0.3             # Ensure compatibility with Flask 2.0.3
+gunicorn[gthread]==20.1.0
+requests==2.31.0
+python-dotenv==1.0.0
 
 # Additional Tools
-python-dateutil==2.8.2         # For date and time manipulation
-tqdm==4.64.1                   # For progress bars during training
+python-dateutil==2.8.2
+tqdm==4.64.1
