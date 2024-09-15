@@ -30,3 +30,6 @@ gunicorn[gthread]>=20.1.0
 
 # Hugging Face Transformers, with torch support, compatible with PyTorch 1.9.0
 transformers[torch]>=4.30.0
+
+# Torchmetrics adjusted to a compatible version with torch 1.9.0
+torchmetrics==0.6.0  # Modify if needed based on compatibility
