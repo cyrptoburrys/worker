@@ -1,11 +1,32 @@
+# PyTorch for deep learning model handling, compatible with current setup
 torch==2.0.1 
+
+# PyTorch Forecasting for time series models like TFT, ensure compatibility with torch
 pytorch-forecasting==0.9.1
-pandas
+
+# Pandas for data manipulation, left unspecified to allow flexibility
+pandas>=1.5.3  # Ensure a stable version, should work well with PyTorch
+
+# Requests library for making HTTP requests, compatible and widely used
 requests==2.31.0
-python-dotenv
-numpy==1.25.2
+
+# Dotenv for loading environment variables, works across Flask and Docker setups
+python-dotenv>=1.0.0
+
+# Numpy for numerical operations, matching with PyTorch and Scikit-learn
+numpy==1.25.2  # Ensure compatibility with torch and scikit-learn
+
+# Joblib for model serialization and parallel processing
 joblib==1.3.2
+
+# Scikit-learn for ML utilities, aligns with pandas and numpy versions
 scikit-learn==1.3.1
-flask[async]
-gunicorn[gthread]
-transformers[torch]
+
+# Flask for setting up the asynchronous server, updated to latest stable async support
+flask[async]>=2.1.0  # Ensure async support is enabled for your setup
+
+# Gunicorn for running Flask apps in production with thread support
+gunicorn[gthread]>=20.1.0
+
+# Hugging Face Transformers, with torch support, compatible with PyTorch 2.0.1
+transformers[torch]>=4.30.0
