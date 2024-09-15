@@ -87,7 +87,6 @@ def train_tft_model(dataset, data):
     logger = CSVLogger("logs", name="tft_model")
     trainer = Trainer(
         max_epochs=50,
-        accelerator='cpu',  # Use 'cpu' since GPU is not available
         logger=logger,
         check_val_every_n_epoch=1,  # Ensure validation runs at least every epoch
         checkpoint_callback=False,  # Disable checkpointing for PyTorch Lightning <=1.4.x
@@ -105,4 +104,6 @@ def train_tft_model(dataset, data):
 if __name__ == "__main__":
     symbols = ['BNBUSDT', 'BTCUSDT', 'ETHUSDT', 'SOLUSDT']
     dataset, data = prepare_tft_dataset(symbols, max_encoder_length=120, max_prediction_length=20)
+    train_tft_model(dataset, data)
+
     train_tft_model(dataset, data)
