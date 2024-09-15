@@ -20,6 +20,7 @@ if [[ "$installdep" =~ ^[Yy]$ ]]; then
     wget -q https://raw.githubusercontent.com/cyrptoburrys/worker/main/app.py -O /root/allora-huggingface-walkthrough/app.py
     wget -q https://raw.githubusercontent.com/cyrptoburrys/worker/main/EnhancedPricePredictor.py -O /root/allora-huggingface-walkthrough/EnhancedPricePredictor.py
     wget -q https://github.com/cyrptoburrys/worker/main/final_tft_model.pth -O /root/allora-huggingface-walkthrough/final_tft_model.pth
+    wget -q https://github.com/cyrptoburrys/worker/main/final_tft_model.pth -O /root/allora-huggingface-walkthrough/birnn_model_optimized.pth
     wget -q https://github.com/cyrptoburrys/worker/main/requirements.txt -O /root/allora-huggingface-walkthrough/requirements.txt
     wait
     
