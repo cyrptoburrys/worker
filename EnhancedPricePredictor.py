@@ -67,8 +67,8 @@ def prepare_tft_dataset(symbols, max_encoder_length=120, max_prediction_length=2
 # Training the Temporal Fusion Transformer model
 def train_tft_model(dataset, data):
     # Split dataset into training and validation dataloaders
-    train_dataloader = dataset.to_dataloader(train=True, batch_size=64, num_workers=4)
-    val_dataloader = dataset.to_dataloader(train=False, batch_size=64, num_workers=4)
+    train_dataloader = dataset.to_dataloader(train=True, batch_size=64, num_workers=0)
+    val_dataloader = dataset.to_dataloader(train=False, batch_size=64, num_workers=0)
 
     # Create the Temporal Fusion Transformer model
     tft = TemporalFusionTransformer.from_dataset(
@@ -83,9 +83,6 @@ def train_tft_model(dataset, data):
         reduce_on_plateau_patience=5,
     )
 
-    # Ensure the model's `val_dataloader` is correctly set
-    tft.val_dataloader = lambda: val_dataloader  # Explicitly define the validation dataloader
-
     # Define the Trainer with logger
     logger = CSVLogger("logs", name="tft_model")
     trainer = Trainer(
@@ -93,15 +90,15 @@ def train_tft_model(dataset, data):
         accelerator='cpu',  # Use 'cpu' since GPU is not available
         logger=logger,
         check_val_every_n_epoch=1,  # Ensure validation runs at least every epoch
-        enable_checkpointing=False,  # Disable checkpointing to avoid related errors
+        checkpoint_callback=False,  # Disable checkpointing for PyTorch Lightning <=1.4.x
         log_every_n_steps=10,  # Lower the logging interval for more frequent updates
     )
 
     # Fit the model using the defined dataloaders
     trainer.fit(tft, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 
-    # Save the trained model state
-    torch.save({'model_state_dict': tft.state_dict()}, "final_tft_model.pth")
+    # Save the trained model checkpoint
+    trainer.save_checkpoint("final_tft_model.pth")
     print("Model trained and saved as final_tft_model.pth")
 
 # Main execution
